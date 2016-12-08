@@ -9,7 +9,7 @@ const Albums = (props) => {
       <div className="row">
       {props.albums.map(album => (
         <div key={album.id} className="col-xs-4">
-          <a className="thumbnail" href="#">
+          <a className="thumbnail" href="#" onClick={() => props.handleClick(album)}>
             <img src={album.imageUrl} />
             <div className="caption">
               <h5>
