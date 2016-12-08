@@ -20,11 +20,13 @@ const Album = (props) => {
       </thead>
       <tbody>
       {props.album.songs.map(song => (
-        <tr key={song.id}>
+        <tr key={song.id} className={song.id === props.currentSong.id ? 'active' : ''}>
           <td>
-            <button className="btn btn-default btn-xs">
+          {song.id === props.currentSong.id ? null :
+            <button className="btn btn-default btn-xs" onClick={() => props.start(song)}>
               <span className="glyphicon glyphicon-play"></span>
             </button>
+          }
           </td>
           <td>{song.name}</td>
           <td>{song.artists.map(artist => artist.name)}</td>

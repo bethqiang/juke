@@ -8,16 +8,20 @@ import Footer from '../components/Footer';
 import Album from '../components/Album';
 import Albums from '../components/Albums';
 
+const audio = document.createElement('audio');
+
 class AppContainer extends Component {
 
   constructor() {
     super();
     this.state = {
       albums: [],
-      album: {}
+      album: {},
+      currentSong: {}
     };
     this.handleClick = this.handleClick.bind(this);
     this.deselectAlbum = this.deselectAlbum.bind(this);
+    this.start = this.start.bind(this);
   }
 
   componentDidMount() {
@@ -48,12 +52,21 @@ class AppContainer extends Component {
     this.setState({album: {}});
   }
 
+  start(song) {
+    audio.src = `api/songs/${song.id}/audio`;
+    // audio.src = 'https://learndotresources.s3.amazonaws.com/workshop/5616dbe5a561920300b10cd7/Dexter_Britain_-_03_-_The_Stars_Are_Out_Interlude.mp3';
+    audio.pause();
+    audio.load();
+    audio.play();
+    this.setState({currentSong: song});
+  }
+
   render() {
     return(
       <div id="main" className="container-fluid">
         <Sidebar deselectAlbum={this.deselectAlbum}/>
         <div className="col-xs-10">
-          {this.state.album.id ? <Album album={this.state.album} /> : <Albums albums={this.state.albums} handleClick={this.handleClick} />}
+          {this.state.album.id ? <Album album={this.state.album} start={this.start} currentSong={this.state.currentSong}/> : <Albums albums={this.state.albums} handleClick={this.handleClick} />}
         </div>
         <Footer />
       </div>
