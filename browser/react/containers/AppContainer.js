@@ -3,130 +3,135 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 
+import initialState from '../initialState';
+import AUDIO from '../audio';
+import {convertAlbum, convertAlbums, skip} from '../utils';
+
 import Sidebar from '../components/Sidebar';
-import Footer from '../components/Footer';
+import Player from '../components/Player';
 import Album from '../components/Album';
 import Albums from '../components/Albums';
 
-const audio = document.createElement('audio');
-
 class AppContainer extends Component {
 
-  constructor() {
-    super();
-    this.state = {
-      albums: [],
-      album: {},
-      currentSong: {},
-      currentSongList: [],
-      isPlaying: false,
-      progress: 0
-    };
-    this.handleClick = this.handleClick.bind(this);
-    this.deselectAlbum = this.deselectAlbum.bind(this);
-    this.start = this.start.bind(this);
-    this.pause = this.pause.bind(this);
+  constructor(props) {
+    super(props);
+    this.state = initialState;
+
+    this.toggle = this.toggle.bind(this);
+    this.toggleOne = this.toggleOne.bind(this);
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
+    this.selectAlbum = this.selectAlbum.bind(this);
+    this.deselectAlbum = this.deselectAlbum.bind(this);
   }
 
   componentDidMount() {
-    let albums;
-    axios.get('api/albums')
-    .then(res => res.data)
-    .then(albumsFromServer => {
-      albums = albumsFromServer.map(album => {
-        album.imageUrl = `/api/albums/${album.id}/image`;
-        return album;
-      });
-      this.setState({albums: albums});
-    })
-    .catch(console.error.bind(console));
+    axios.get('/api/albums/')
+      .then(res => res.data)
+      .then(album => this.onLoad(convertAlbums(album)));
 
-    // when song ends, play the next song
-    audio.addEventListener('ended', () => this.next());
-
-    // progress bar
-    audio.addEventListener('timeupdate', () => {
-      this.setState({
-        progress: 100 * audio.currentTime / audio.duration
-      });
-    });
+    AUDIO.addEventListener('ended', () =>
+      this.next());
+    AUDIO.addEventListener('timeupdate', () =>
+      this.setProgress(AUDIO.currentTime / AUDIO.duration));
   }
 
-  handleClick(album) {
-    axios.get(`api/albums/${album.id}`)
-    .then(res => res.data)
-    .then(albumFromServer => {
-      albumFromServer.imageUrl = `/api/albums/${album.id}/image`;
-      this.setState({album: albumFromServer});
-    })
-    .catch(console.error.bind(console));
-  }
-
-  deselectAlbum() {
-    this.setState({album: {}});
-  }
-
-  start(song, list) {
-    audio.src = `api/songs/${song.id}/audio`;
-    audio.pause();
-    audio.load();
-    audio.play();
+  onLoad(albums) {
     this.setState({
-      currentSong: song,
-      currentSongList: list,
-      isPlaying: true
+      albums: albums
     });
+  }
+
+  play() {
+    AUDIO.play();
+    this.setState({ isPlaying: true });
   }
 
   pause() {
-    audio.pause();
-    this.setState({isPlaying: false});
+    AUDIO.pause();
+    this.setState({ isPlaying: false });
   }
 
-  skip(interval, {currentSongList, currentSong}) {
-    let idx = currentSongList.map(song => song.id).indexOf(currentSong.id);
-    const mod = (num, m) => ((num % m) + m) % m;
-    idx = mod(idx + interval, currentSongList.length);
-    const next = currentSongList[idx];
-    return [next, currentSongList];
+  load(currentSong, currentSongList) {
+    AUDIO.src = currentSong.audioUrl;
+    AUDIO.load();
+    this.setState({
+      currentSong: currentSong,
+      currentSongList: currentSongList
+    });
+  }
+
+  startSong(song, list) {
+    this.pause();
+    this.load(song, list);
+    this.play();
+  }
+
+  toggleOne(selectedSong, selectedSongList) {
+    if (selectedSong.id !== this.state.currentSong.id)
+      this.startSong(selectedSong, selectedSongList);
+    else this.toggle();
+  }
+
+  toggle() {
+    if (this.state.isPlaying) this.pause();
+    else this.play();
   }
 
   next() {
-    this.start(...this.skip(1, this.state));
+    this.startSong(...skip(1, this.state));
   }
 
   prev() {
-    this.start(...this.skip(-1, this.state));
+    this.startSong(...skip(-1, this.state));
+  }
+
+  setProgress(progress) {
+    this.setState({progress: progress});
+  }
+
+  selectAlbum(albumId) {
+    axios.get(`/api/albums/${albumId}`)
+      .then(res => res.data)
+      .then(album => this.setState({
+        selectedAlbum: convertAlbum(album)
+      }));
+  }
+
+  deselectAlbum() {
+    this.setState({selectedAlbum: {}});
   }
 
   render() {
     return (
       <div id="main" className="container-fluid">
-        <Sidebar deselectAlbum={this.deselectAlbum}/>
-        <div className="col-xs-10">
-          {this.state.album.id ?
-            <Album
-              album={this.state.album}
-              start={this.start}
-              pause={this.pause}
-              currentSong={this.state.currentSong}
-              isPlaying={this.state.isPlaying}/> :
-            <Albums
-              albums={this.state.albums}
-              handleClick={this.handleClick} />}
+        <div className="col-xs-2">
+          <Sidebar deselectAlbum={this.deselectAlbum} />
         </div>
-        {this.state.currentSong.id ?
-          <Footer
-          start={this.start}
-          pause={this.pause}
+        <div className="col-xs-10">
+        {
+          this.state.selectedAlbum.id ?
+          <Album
+            album={this.state.selectedAlbum}
+            currentSong={this.state.currentSong}
+            isPlaying={this.state.isPlaying}
+            toggleOne={this.toggleOne}
+          /> :
+          <Albums
+            albums={this.state.albums}
+            selectAlbum={this.selectAlbum}
+          />
+        }
+        </div>
+        <Player
           currentSong={this.state.currentSong}
-          currentSongList={this.state.currentSongList}
           isPlaying={this.state.isPlaying}
+          progress={this.state.progress}
           next={this.next}
           prev={this.prev}
-          progress={this.state.progress} /> : null}
+          toggle={this.toggle}
+        />
       </div>
     );
   }
