@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-const Footer = () => {
+const Footer = (props) => {
   return (
     <footer>
       <div className="pull-left">
@@ -10,7 +10,9 @@ const Footer = () => {
           <span className="glyphicon glyphicon-step-backward"></span>
         </button>
         <button className="btn btn-default">
-          <span className="glyphicon glyphicon-play"></span>
+          {props.isPlaying ? <span className="glyphicon glyphicon-pause" onClick={props.pause}></span> :
+          <span className="glyphicon glyphicon-play" onClick={() => props.start(props.currentSong)}></span>
+          }
         </button>
         <button className="btn btn-default">
           <span className="glyphicon glyphicon-step-forward"></span>
