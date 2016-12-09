@@ -22,14 +22,12 @@ const Album = (props) => {
       {props.album.songs.map(song => (
         <tr key={song.id} className={song.id === props.currentSong.id && props.isPlaying ? 'active' : null}>
           <td>
-          {song.id === props.currentSong.id && props.isPlaying ?
-            <button className="btn btn-default btn-xs" onClick={props.pause}>
-              <span className="glyphicon glyphicon-pause"></span>
-            </button> :
-            <button className="btn btn-default btn-xs" onClick={() => props.start(song)}>
-              <span className="glyphicon glyphicon-play"></span>
+            <button className="btn btn-default btn-xs">
+            {song.id === props.currentSong.id && props.isPlaying ?
+              <span className="glyphicon glyphicon-pause" onClick={props.pause}></span> :
+              <span className="glyphicon glyphicon-play" onClick={() => props.start(song, props.album.songs)}></span>
+            }
             </button>
-          }
           </td>
           <td>{song.name}</td>
           <td>{song.artists.map(artist => artist.name)}</td>

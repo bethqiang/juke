@@ -6,7 +6,7 @@ const Footer = (props) => {
   return (
     <footer>
       <div className="pull-left">
-        <button className="btn btn-default">
+        <button className="btn btn-default" onClick={props.prev}>
           <span className="glyphicon glyphicon-step-backward"></span>
         </button>
         <button className="btn btn-default">
@@ -14,13 +14,13 @@ const Footer = (props) => {
           <span className="glyphicon glyphicon-play" onClick={() => props.start(props.currentSong)}></span>
           }
         </button>
-        <button className="btn btn-default">
+        <button className="btn btn-default" onClick={props.next}>
           <span className="glyphicon glyphicon-step-forward"></span>
         </button>
       </div>
       <div className="bar">
         <div className="progress">
-          <div className="progress-bar"></div>
+          <div className="progress-bar" style={{width: `${props.progress}%`}}></div>
         </div>
       </div>
     </footer>
