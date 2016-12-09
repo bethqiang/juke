@@ -35,8 +35,10 @@ sidebar {
       color: #c8c8c8; }
       sidebar .menu-item a:hover {
         color: white; }
-    sidebar .menu-item.active, sidebar .menu-item:hover {
-      border-left: 3px solid #00bc8c; }
+    sidebar .menu-item .active {
+      border-left: 3px solid #00bc8c;
+      margin-left: -15px;
+      padding-left: 12px; }
 
 footer {
   position: fixed;
