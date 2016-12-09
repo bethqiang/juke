@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import initialState from '../initialState';
 import AUDIO from '../audio';
-import {convertAlbum, convertAlbums, skip} from '../utils';
+import {convertAlbum, convertAlbums, convertSongs, skip} from '../utils';
 
 import Sidebar from '../components/Sidebar';
 import Player from '../components/Player';
@@ -21,12 +21,17 @@ class AppContainer extends Component {
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
     this.selectAlbum = this.selectAlbum.bind(this);
+    this.selectArtist = this.selectArtist.bind(this);
   }
 
   componentDidMount() {
     axios.get('/api/albums/')
       .then(res => res.data)
       .then(album => this.onLoad(convertAlbums(album)));
+
+    axios.get('/api/artists/')
+      .then(res => res.data)
+      .then(artists => this.setState({artists: artists}));
 
     AUDIO.addEventListener('ended', () =>
       this.next());
@@ -96,6 +101,24 @@ class AppContainer extends Component {
       }));
   }
 
+  selectArtist(artistId) {
+    Promise.all([
+      axios.get(`/api/artists/${artistId}`),
+      axios.get(`/api/artists/${artistId}/albums`),
+      axios.get(`/api/artists/${artistId}/songs`)
+    ])
+    .then(response => response.map(res => res.data))
+    .then(data => this.onLoadArtist(...data));
+  }
+
+  onLoadArtist (artist, albums, songs) {
+    songs = convertSongs(songs);
+    albums = convertAlbums(albums);
+    artist.albums = albums;
+    artist.songs = songs;
+    this.setState({selectedArtist: artist});
+  }
+
   render() {
     return (
       <div id="main" className="container-fluid">
@@ -113,7 +136,12 @@ class AppContainer extends Component {
               toggle: this.toggleOne,
               // Albums component's props
               albums: this.state.albums,
-              selectAlbum: this.selectAlbum
+              selectAlbum: this.selectAlbum,
+              // Artists component's props
+              artists: this.state.artists,
+              selectArtist: this.selectArtist,
+              // Artist component's props
+              artist: this.state.selectedArtist
             })
             : null
         }
