@@ -1,6 +1,7 @@
 'use strict';
 
 import React, {Component} from 'react';
+import {Link} from 'react-router';
 
 import Albums from './Albums';
 import Songs from './Songs';
@@ -18,13 +19,25 @@ class Artist extends Component {
   }
 
   render() {
+
     const artist = this.props.artist;
+    const children = this.props.children;
+    const propsToPassToChildren = {
+      albums: artist.albums,
+      songs: artist.songs,
+      currentSong: this.props.currentSong,
+      isPlaying: this.props.isPlaying,
+      toggleOne: this.props.toggleOne
+    };
+
     return (
       <div>
         <h3>{artist.name}</h3>
-        <Albums albums={artist.albums} />
-        <h3>Songs</h3>
-        <Songs currentSong={this.props.currentSong} songs={artist.songs} />
+        <ul className="nav nav-tabs">
+          <li><Link to={`/artists/${artist.id}/albums`}>ALBUMS</Link></li>
+          <li><Link to={`/artists/${artist.id}/songs`}>SONGS</Link></li>
+        </ul>
+        {children && React.cloneElement(children, propsToPassToChildren)}
       </div>
     );
   }
