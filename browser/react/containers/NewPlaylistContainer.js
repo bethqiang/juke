@@ -1,7 +1,6 @@
 'use strict';
 
 import React, {Component} from 'react';
-import axios from 'axios';
 
 import NewPlaylist from '../components/NewPlaylist';
 

@@ -1,6 +1,7 @@
 'use strict';
 
 import React, {Component} from 'react';
+import {browserHistory} from 'react-router';
 import axios from 'axios';
 
 import initialState from '../initialState';
@@ -23,6 +24,7 @@ class AppContainer extends Component {
     this.selectAlbum = this.selectAlbum.bind(this);
     this.selectArtist = this.selectArtist.bind(this);
     this.addPlaylist = this.addPlaylist.bind(this);
+    this.selectPlaylist = this.selectPlaylist.bind(this);
   }
 
   componentDidMount() {
@@ -98,10 +100,10 @@ class AppContainer extends Component {
 
   selectAlbum(albumId) {
     axios.get(`/api/albums/${albumId}`)
-      .then(res => res.data)
-      .then(album => this.setState({
-        selectedAlbum: convertAlbum(album)
-      }));
+    .then(res => res.data)
+    .then(album => this.setState({
+      selectedAlbum: convertAlbum(album)
+    }));
   }
 
   selectArtist(artistId) {
@@ -129,6 +131,19 @@ class AppContainer extends Component {
       this.setState({
         playlists: [...this.state.playlists, playlist]
       });
+      const path = `/playlists/${playlist.id}`;
+      browserHistory.push(path);
+    });
+  }
+
+  selectPlaylist(playlistId) {
+    axios.get(`/api/playlists/${playlistId}`)
+    .then(res => res.data)
+    .then(playlist => {
+      playlist.songs = convertSongs(playlist.songs);
+      this.setState({
+        selectedPlaylist: playlist
+      });
     });
   }
 
@@ -139,7 +154,8 @@ class AppContainer extends Component {
       toggle: this.toggle,
       selectAlbum: this.selectAlbum,
       selectArtist: this.selectArtist,
-      addPlaylist: this.addPlaylist
+      addPlaylist: this.addPlaylist,
+      selectPlaylist: this.selectPlaylist
     });
 
     return (

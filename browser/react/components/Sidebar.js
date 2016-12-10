@@ -26,12 +26,12 @@ const Sidebar = (props) => {
         <ul className="list-unstyled">
         {playlists.map(playlist => (
             <li key={playlist.id} className="playlist-item menu-item">
-              <Link to="FILLMEIN">{playlist.name}</Link>
+              <Link to={`/playlists/${playlist.id}`}>{playlist.name}</Link>
             </li>
           ))}
         </ul>
         <h4>
-          <Link to="/playlist/new" className="btn btn-primary btn-block">
+          <Link to="/playlists/new" className="btn btn-primary btn-block">
             <span className="glyphicon glyphicon-plus"></span> PLAYLIST
           </Link>
         </h4>
