@@ -17,6 +17,15 @@ const Sidebar = () => {
           <Link to="/artists" activeClassName="active">ARTISTS</Link>
         </h4>
       </section>
+      <hr />
+      <section>
+        <h4 className="text-muted">PLAYLISTS</h4>
+        <h4>
+          <Link to="/playlist/new" className="btn btn-primary btn-block">
+            <span className="glyphicon glyphicon-plus"></span> PLAYLIST
+          </Link>
+        </h4>
+      </section>
     </sidebar>
   );
 };
