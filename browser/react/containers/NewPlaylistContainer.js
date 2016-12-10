@@ -45,9 +45,7 @@ class NewPlaylistContainer extends Component {
     this.setState({
       playlistName: ''
     });
-    axios.post('/api/playlists', {name: this.state.playlistName})
-    .then(res => res.data)
-    .then(playlist => console.log(playlist));
+    this.props.addPlaylist(this.state.playlistName);
   }
 
   render() {

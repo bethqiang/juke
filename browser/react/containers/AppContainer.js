@@ -22,12 +22,14 @@ class AppContainer extends Component {
     this.prev = this.prev.bind(this);
     this.selectAlbum = this.selectAlbum.bind(this);
     this.selectArtist = this.selectArtist.bind(this);
+    this.addPlaylist = this.addPlaylist.bind(this);
   }
 
   componentDidMount() {
     Promise.all([
       axios.get('/api/albums/'),
-      axios.get('/api/artists/')
+      axios.get('/api/artists/'),
+      axios.get('/api/playlists/')
     ])
     .then(response => response.map(res => res.data))
     .then(data => this.onLoad(...data));
@@ -38,10 +40,11 @@ class AppContainer extends Component {
       this.setProgress(AUDIO.currentTime / AUDIO.duration));
   }
 
-  onLoad (albums, artists) {
+  onLoad (albums, artists, playlists) {
     this.setState({
       albums: convertAlbums(albums),
-      artists: artists
+      artists: artists,
+      playlists: playlists
     });
   }
 
@@ -111,12 +114,22 @@ class AppContainer extends Component {
     .then(data => this.onLoadArtist(...data));
   }
 
-  onLoadArtist (artist, albums, songs) {
+  onLoadArtist(artist, albums, songs) {
     songs = convertSongs(songs);
     albums = convertAlbums(albums);
     artist.albums = albums;
     artist.songs = songs;
     this.setState({selectedArtist: artist});
+  }
+
+  addPlaylist(playlistName) {
+    axios.post('/api/playlists', {name: playlistName})
+    .then(res => res.data)
+    .then(playlist => {
+      this.setState({
+        playlists: [...this.state.playlists, playlist]
+      });
+    });
   }
 
   render() {
@@ -125,13 +138,14 @@ class AppContainer extends Component {
       toggleOne: this.toggleOne,
       toggle: this.toggle,
       selectAlbum: this.selectAlbum,
-      selectArtist: this.selectArtist
+      selectArtist: this.selectArtist,
+      addPlaylist: this.addPlaylist
     });
 
     return (
       <div id="main" className="container-fluid">
         <div className="col-xs-2">
-          <Sidebar />
+          <Sidebar playlists={this.state.playlists} />
         </div>
         <div className="col-xs-10">
         {
