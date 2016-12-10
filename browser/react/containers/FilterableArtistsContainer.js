@@ -28,7 +28,7 @@ class FilterableArtistContainer extends Component {
 
     return (
       <div>
-        <FilterInput handleChange={this.handleChange} />
+        <FilterInput handleChange={this.handleChange} inputVal={inputVal} />
         <Artists artists={filteredArtists} />
       </div>
     );

@@ -3,12 +3,17 @@
 import React from 'react';
 
 const FilterInput = (props) => {
+
+  const handleChange = props.handleChange;
+  const inputVal = props.inputVal;
+
   return (
     <form className="form-group" style={{marginTop: '20px'}}>
       <input
         className="form-control"
         placeholder="Enter artist name"
-        onChange={props.handleChange}
+        value={inputVal}
+        onChange={handleChange}
       />
     </form>
   );

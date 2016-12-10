@@ -6,10 +6,6 @@ import Songs from './Songs';
 
 class Album extends Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount () {
     const albumId = this.props.params.albumId;
     const selectAlbum = this.props.selectAlbum;

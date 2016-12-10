@@ -3,14 +3,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 
-import Albums from './Albums';
-import Songs from './Songs';
-
 class Artist extends Component {
-
-  constructor(props) {
-    super(props);
-  }
 
   componentDidMount () {
     const artistId = this.props.params.artistId;
