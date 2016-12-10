@@ -29,7 +29,7 @@ class AppContainer extends Component {
       axios.get('/api/albums/'),
       axios.get('/api/artists/')
     ])
-    .then(res => res.map(r => r.data))
+    .then(response => response.map(res => res.data))
     .then(data => this.onLoad(...data));
 
     AUDIO.addEventListener('ended', () =>
