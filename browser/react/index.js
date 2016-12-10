@@ -12,6 +12,7 @@ import Artist from './components/Artist';
 import Songs from './components/Songs';
 import NewPlaylistContainer from './containers/NewPlaylistContainer';
 import Playlist from './components/Playlist';
+import LyricsContainer from './containers/LyricsContainer';
 
 ReactDOM.render(
   <Router history={browserHistory}>
@@ -26,6 +27,7 @@ ReactDOM.render(
       </Route>
       <Route path="/playlists/new" component={NewPlaylistContainer} />
       <Route path="/playlists/:playlistId" component={Playlist} />
+      <Route path="/lyrics" component={LyricsContainer} />
     </Route>
   </Router>,
   document.getElementById('app')
