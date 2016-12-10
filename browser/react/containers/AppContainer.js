@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import initialState from '../initialState';
 import AUDIO from '../audio';
-import {convertAlbum, convertAlbums, convertSongs, skip} from '../utils';
+import {convertAlbum, convertAlbums, convertSong, convertSongs, skip} from '../utils';
 
 import Sidebar from '../components/Sidebar';
 import Player from '../components/Player';
@@ -25,6 +25,8 @@ class AppContainer extends Component {
     this.selectArtist = this.selectArtist.bind(this);
     this.addPlaylist = this.addPlaylist.bind(this);
     this.selectPlaylist = this.selectPlaylist.bind(this);
+    this.loadSongs = this.loadSongs.bind(this);
+    this.addSongToPlaylist = this.addSongToPlaylist.bind(this);
   }
 
   componentDidMount() {
@@ -76,9 +78,12 @@ class AppContainer extends Component {
   }
 
   toggleOne(selectedSong, selectedSongList) {
-    if (selectedSong.id !== this.state.currentSong.id)
+    if (selectedSong.id !== this.state.currentSong.id) {
       this.startSong(selectedSong, selectedSongList);
-    else this.toggle();
+    }
+    else {
+      this.toggle();
+    }
   }
 
   toggle() {
@@ -147,6 +152,35 @@ class AppContainer extends Component {
     });
   }
 
+  loadSongs () {
+    axios.get('/api/songs')
+    .then(res => res.data)
+    .then(songs => {
+      this.setState({
+        songs: songs
+      });
+    });
+  }
+
+  addSongToPlaylist (playlistId, songId) {
+    return axios.post(`/api/playlists/${playlistId}/songs`, {
+      id: songId
+    })
+    .then(res => res.data)
+    .then(song => {
+      const selectedPlaylist = this.state.selectedPlaylist;
+      const songs = this.state.selectedPlaylist.songs;
+      const newSongs = [...songs, convertSong(song)];
+      const newSelectedPlaylist = Object.assign({}, selectedPlaylist, {
+        songs: newSongs
+      });
+
+      this.setState({
+        selectedPlaylist: newSelectedPlaylist
+      });
+    });
+  }
+
   render() {
 
     const props = Object.assign({}, this.state, {
@@ -155,7 +189,9 @@ class AppContainer extends Component {
       selectAlbum: this.selectAlbum,
       selectArtist: this.selectArtist,
       addPlaylist: this.addPlaylist,
-      selectPlaylist: this.selectPlaylist
+      selectPlaylist: this.selectPlaylist,
+      loadSongs: this.loadSongs,
+      addSongToPlaylist: this.addSongToPlaylist
     });
 
     return (

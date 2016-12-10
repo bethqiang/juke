@@ -3,12 +3,9 @@
 import React, {Component} from 'react';
 
 import Songs from './Songs';
+import AddSongContainer from '../containers/AddSongContainer';
 
 class Playlist extends Component {
-
-  constructor(props){
-    super(props);
-  }
 
   componentDidMount() {
     const playlistId = this.props.params.playlistId;
@@ -33,6 +30,7 @@ class Playlist extends Component {
         <Songs {...this.props} songs={playlist.songs} />
         {playlist.songs && !playlist.songs.length && <small>No songs.</small>}
         <hr/>
+        <AddSongContainer {...this.props} />
       </div>
     );
   }
