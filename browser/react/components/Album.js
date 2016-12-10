@@ -17,15 +17,17 @@ class Album extends Component {
   }
 
   render() {
-    const album = this.props.album;
+
+    const album = this.props.selectedAlbum;
     const currentSong = this.props.currentSong;
     const isPlaying = this.props.isPlaying;
     const toggleOne = this.props.toggleOne;
+
     return (
       <div className="album">
         <div>
-          <h3>{ album.name }</h3>
-          <img src={ album.imageUrl } className="img-thumbnail" />
+          <h3>{album.name}</h3>
+          <img src={album.imageUrl} className="img-thumbnail" />
         </div>
         <Songs
           songs={album.songs}

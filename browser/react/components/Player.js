@@ -5,11 +5,12 @@ import React from 'react';
 const Player = (props) => {
 
   const currentSong = props.currentSong;
+  const currentSongList = props.currentSongList;
   const isPlaying = props.isPlaying;
   const progress = props.progress;
+  const next = props.next;
   const prev = props.prev;
   const toggle = props.toggle;
-  const next = props.next;
 
   return (
     <footer>

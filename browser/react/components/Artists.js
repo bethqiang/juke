@@ -6,7 +6,6 @@ import {Link} from 'react-router';
 const Artists = (props) => {
 
   const artists = props.artists;
-  const selectArtist = props.selectArtist;
 
   return (
     <div>
