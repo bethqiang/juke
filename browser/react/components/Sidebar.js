@@ -1,9 +1,7 @@
-'use strict';
-
 import React from 'react';
-import {Link} from 'react-router';
+import { Link } from 'react-router';
 
-const Sidebar = (props) => {
+const Sidebar = props => {
 
   const playlists = props.playlists;
 

@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import store from '../store';
 import Artist from '../components/Artist';
 
-import {toggleOne} from '../action-creators/player';
+import { toggleOne } from '../action-creators/player';
 
 class ArtistContainer extends Component {
 

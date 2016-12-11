@@ -3,7 +3,7 @@ import {
   RECEIVE_PLAYLIST,
 } from '../constants';
 
-import {convertSongs} from '../utils';
+import { convertSongs } from '../utils';
 
 const initialPlaylistsState = {
   list: [],

@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Lyrics = (props) => {
+const Lyrics = props => {
 
-  const text = props.text; // lyrics
+  const text = props.text;
   const setArtist = props.setArtist;
   const artistQuery = props.artistQuery;
   const setSong = props.setSong;
@@ -10,7 +10,7 @@ const Lyrics = (props) => {
   const handleSubmit = props.handleSubmit;
 
   return (
-    <div style={{marginTop: '20px'}}>
+    <div style={{ marginTop: '20px' }}>
       <form onSubmit={handleSubmit}>
         <div className="form-group row">
           <div className="col-md-6 col-xs-12">

@@ -1,9 +1,7 @@
-'use strict';
-
 import React from 'react';
-import {Link} from 'react-router';
+import { Link } from 'react-router';
 
-const Artists = (props) => {
+const Artists = props => {
 
   const artists = props.artists;
 
@@ -13,8 +11,8 @@ const Artists = (props) => {
         <div className="list-group">
         {
           artists.map(artist => (
-              <div className="list-group-item" key={artist.id}>
-                <Link to={`/artists/${artist.id}`}>{artist.name}</Link>
+              <div className="list-group-item" key={ artist.id }>
+                <Link to={`/artists/${artist.id}`}>{ artist.name }</Link>
               </div>
             )
           )

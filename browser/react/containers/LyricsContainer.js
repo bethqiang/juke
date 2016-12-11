@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import store from '../store';
 import Lyrics from '../components/Lyrics';
-import {fetchLyrics} from '../action-creators/lyrics';
+import { fetchLyrics } from '../action-creators/lyrics';
 
 class LyricsContainer extends Component {
 
@@ -30,12 +30,12 @@ class LyricsContainer extends Component {
 
   setArtist(event) {
     const artist = event.target.value;
-    this.setState({artistQuery: artist});
+    this.setState({ artistQuery: artist });
   }
 
   setSong(event) {
     const song = event.target.value;
-    this.setState({songQuery: song});
+    this.setState({ songQuery: song });
   }
 
   handleSubmit(event) {

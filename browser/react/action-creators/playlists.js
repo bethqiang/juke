@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {browserHistory} from 'react-router';
+import { browserHistory } from 'react-router';
 
 import {
   RECEIVE_PLAYLISTS,
@@ -7,7 +7,7 @@ import {
   RECEIVE_SONGS
 } from '../constants';
 
-import {convertSong} from '../utils';
+import { convertSong } from '../utils';
 
 // synchronous
 
@@ -43,12 +43,12 @@ export const getPlaylistById = playlistId => {
 
 export const addNewPlaylist = playlistName => {
   return function(dispatch, getState) {
-    return axios.post('/api/playlists', {name: playlistName})
+    return axios.post('/api/playlists', { name: playlistName })
     .then(res => res.data)
     .then(playlist => {
       const newListOfPlaylists = [...getState().playlists.list, playlist];
       dispatch(receivePlaylists(newListOfPlaylists));
-      browserHistory.push(`/playlists/${playlistId}`);
+      browserHistory.push(`/playlists/${playlist.id}`);
     });
   };
 };
@@ -62,7 +62,7 @@ export const loadAllSongs = () => {
 
 export const addSongToPlaylist = (playlistId, songId) => {
   return function(dispatch, getState) {
-    return axios.post(`/api/playlists/${playlistId}/songs`, {id: songId})
+    return axios.post(`/api/playlists/${playlistId}/songs`, { id: songId })
     .then(res => res.data)
     .then(song => {
       const selectedPlaylist = getState().playlists.selected;

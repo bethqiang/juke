@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-import {SET_LYRICS} from '../constants';
+import { SET_LYRICS } from '../constants';
+
+// synchronous
 
 export const setLyrics = (text) => {
   return {
@@ -9,8 +11,10 @@ export const setLyrics = (text) => {
   };
 };
 
+// asynchronous
+
 export const fetchLyrics = (artist, song) => {
-  return function(dispatch, getState) {
+  return function(dispatch) {
     axios.get(`/api/lyrics/${artist}/${song}`)
     .then(res => {
       dispatch(setLyrics(res.data.lyric));

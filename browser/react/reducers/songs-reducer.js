@@ -1,6 +1,4 @@
-import {
-  RECEIVE_SONGS
-} from '../constants';
+import { RECEIVE_SONGS } from '../constants';
 
 const initialSongsState = [];
 

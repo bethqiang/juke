@@ -3,7 +3,7 @@ import {
   RECEIVE_ALBUM
 } from '../constants';
 
-import {convertAlbum, convertAlbums} from '../utils';
+import { convertAlbum, convertAlbums } from '../utils';
 
 const initialAlbumsState = {
   list: [],

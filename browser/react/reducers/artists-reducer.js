@@ -3,7 +3,7 @@ import {
   RECEIVE_ARTIST
 } from '../constants';
 
-import {convertAlbums, convertSongs} from '../utils';
+import { convertAlbums, convertSongs } from '../utils';
 
 const initialArtistsState = {
   list: [],

@@ -5,20 +5,21 @@ import { Router, Route, browserHistory, IndexRedirect } from 'react-router';
 import axios from 'axios';
 
 import store from './store';
-import {receiveAlbums, getAlbumById} from './action-creators/albums';
-import {receiveArtists, getArtistById} from './action-creators/artists';
-import {receivePlaylists, getPlaylistById} from './action-creators/playlists';
+import { receiveAlbums, getAlbumById } from './action-creators/albums';
+import { receiveArtists, getArtistById } from './action-creators/artists';
+import { receivePlaylists, getPlaylistById } from './action-creators/playlists';
 
-import AppContainer from './containers/AppContainer';
 import AlbumsContainer from './containers/AlbumsContainer';
-import Albums from './components/Albums';
 import AlbumContainer from './containers/AlbumContainer';
 import FilterableArtistsContainer from './containers/FilterableArtistsContainer';
 import ArtistContainer from './containers/ArtistContainer';
-import Songs from './components/Songs';
 import NewPlaylistContainer from './containers/NewPlaylistContainer';
 import PlaylistContainer from './containers/PlaylistContainer';
 import LyricsContainer from './containers/LyricsContainer';
+
+import App from './components/App';
+import Albums from './components/Albums';
+import Songs from './components/Songs';
 
 const onAppEnter = function() {
   Promise.all([
@@ -49,7 +50,7 @@ const onPlaylistEnter = function(nextRouterState) {
 
 ReactDOM.render(
   <Router history={browserHistory}>
-    <Route path="/" component={AppContainer} onEnter={onAppEnter}>
+    <Route path="/" component={App} onEnter={onAppEnter}>
       <IndexRedirect to="/albums" />
       <Route path="/albums" component={AlbumsContainer} />
       <Route path="/albums/:albumId" component={AlbumContainer} onEnter={onAlbumEnter} />

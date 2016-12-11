@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import AUDIO from '../audio';
 import store from '../store';
-import {prev, next, progressBar, toggleOne} from '../action-creators/player';
+import { prev, next, progressBar, toggleOne } from '../action-creators/player';
 import Player from '../components/Player';
 
 class PlayerContainer extends Component {

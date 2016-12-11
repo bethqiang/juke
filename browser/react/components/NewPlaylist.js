@@ -1,8 +1,6 @@
-'use strict';
-
 import React from 'react';
 
-const NewPlaylist = (props) => {
+const NewPlaylist = props => {
 
   const handleSubmit = props.handleSubmit;
   const playlistName = props.playlistName;

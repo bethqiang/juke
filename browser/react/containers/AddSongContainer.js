@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import AddSong from '../components/AddSong';
 import store from '../store';
-import {loadAllSongs, addSongToPlaylist} from '../action-creators/playlists';
+import { loadAllSongs, addSongToPlaylist } from '../action-creators/playlists';
 
 class AddSongContainer extends Component {
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = Object.assign({}, {
       songId: 1,
       error: false
@@ -40,7 +40,7 @@ class AddSongContainer extends Component {
     const songId = this.state.songId;
 
     store.dispatch(addSongToPlaylist(playlistId, songId))
-    .catch(() => this.setState({error: true}));
+    .catch(() => this.setState({ error: true }));
   }
 
   render() {

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import store from '../store';
 import FilterInput from '../components/FilterInput';
@@ -26,7 +26,7 @@ class FilterableArtistContainer extends Component {
 
   handleChange(event) {
     const inputVal = event.target.value;
-    this.setState({inputVal});
+    this.setState({ inputVal });
   }
 
   render() {

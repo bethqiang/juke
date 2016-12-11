@@ -1,6 +1,13 @@
+import {
+  START_PLAYING,
+  STOP_PLAYING,
+  SET_CURRENT_SONG,
+  SET_LIST,
+  SET_PROGRESS
+} from '../constants';
+
 import AUDIO from '../audio';
-import {skip} from '../utils';
-import {START_PLAYING, STOP_PLAYING, SET_CURRENT_SONG, SET_LIST, SET_PROGRESS} from '../constants';
+import { skip } from '../utils';
 
 // synchronous action creators
 
@@ -72,7 +79,7 @@ export const startSong = (song, list) => {
 
 export const toggle = () => {
   return function(dispatch, getState) {
-    const {isPlaying} = getState().player;
+    const { isPlaying } = getState().player;
     if (isPlaying) dispatch(pause());
     else dispatch(play());
   };
@@ -80,7 +87,7 @@ export const toggle = () => {
 
 export const toggleOne = (selectedSong, selectedSongList) => {
   return function(dispatch, getState) {
-    const {currentSong} = getState().player;
+    const { currentSong } = getState().player;
     if (selectedSong.id !== currentSong.id) {
       dispatch(startSong(selectedSong, selectedSongList));
     } else {
@@ -102,7 +109,7 @@ export const prev = () => {
 };
 
 export const progressBar = (progress) => {
-  return function(dispatch, getState) {
+  return function(dispatch) {
     dispatch(setProgress(progress));
-  }
-}
+  };
+};

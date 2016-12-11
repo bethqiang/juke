@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import store from '../store';
-import Playlist from '../components/Playlist'
-import {toggleOne} from '../action-creators/player';
+import Playlist from '../components/Playlist';
+import { toggleOne } from '../action-creators/player';
 
 class PlaylistContainer extends Component {
 

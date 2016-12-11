@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Player = (props) => {
+const Player = props => {
 
   const currentSong = props.currentSong;
   const currentSongList = props.currentSongList;
@@ -12,7 +12,7 @@ const Player = (props) => {
 
   return (
     <footer>
-      <div style={!currentSong.id ? {display: 'none'} : null}>
+      <div style={!currentSong.id ? { display: 'none' } : null}>
         <div className="pull-left">
           <button className="btn btn-default" onClick={prev}>
             <span className="glyphicon glyphicon-step-backward"></span>
@@ -26,7 +26,7 @@ const Player = (props) => {
         </div>
         <div className="bar">
           <div className="progress">
-            <div className="progress-bar" style={{width: `${progress * 100}%`}}></div>
+            <div className="progress-bar" style={{ width: `${progress * 100}%` }}></div>
           </div>
         </div>
       </div>

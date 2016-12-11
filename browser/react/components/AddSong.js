@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AddSong = (props) => {
+const AddSong = props => {
 
   const songs = props.songs;
   const error = props.error;

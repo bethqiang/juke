@@ -1,6 +1,4 @@
-'use strict';
-
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import NewPlaylist from '../components/NewPlaylist';
 
@@ -19,7 +17,7 @@ class NewPlaylistContainer extends Component {
 
   handleChange(event) {
     let playlistName = event.target.value;
-    this.setState({playlistName});
+    this.setState({ playlistName });
     if (playlistName.length === 0) {
       this.setState({
         valid: false,

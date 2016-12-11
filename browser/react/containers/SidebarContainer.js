@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 
 import store from '../store';
-import Albums from '../components/Albums';
+import Sidebar from '../components/Sidebar';
 
-class AlbumsContainer extends Component {
+class SidebarContainer extends Component {
 
   constructor() {
     super();
-    this.state = store.getState().albums;
+    this.state = store.getState().playlists;
   }
 
   componentDidMount() {
     this.unsubscribe = store.subscribe(() => {
-      this.setState(store.getState().albums);
+      this.setState(store.getState().playlists);
     });
   }
 
@@ -22,10 +22,10 @@ class AlbumsContainer extends Component {
 
   render() {
     return (
-      <Albums albums={this.state.list} />
+      <Sidebar playlists={this.state.list}/>
     );
   }
 
 }
 
-export default AlbumsContainer;
+export default SidebarContainer;
