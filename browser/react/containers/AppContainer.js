@@ -22,7 +22,7 @@ class AppContainer extends Component {
     this.toggleOne = this.toggleOne.bind(this);
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
-    this.selectAlbum = this.selectAlbum.bind(this);
+    // this.selectAlbum = this.selectAlbum.bind(this);
     this.selectArtist = this.selectArtist.bind(this);
     this.addPlaylist = this.addPlaylist.bind(this);
     this.selectPlaylist = this.selectPlaylist.bind(this);
@@ -37,7 +37,6 @@ class AppContainer extends Component {
     });
 
     Promise.all([
-      axios.get('/api/albums/'),
       axios.get('/api/artists/'),
       axios.get('/api/playlists/')
     ])
@@ -54,9 +53,8 @@ class AppContainer extends Component {
     this.unsubscribe();
   }
 
-  onLoad (albums, artists, playlists) {
+  onLoad (artists, playlists) {
     this.setState({
-      albums: convertAlbums(albums),
       artists: artists,
       playlists: playlists
     });
@@ -98,13 +96,13 @@ class AppContainer extends Component {
     store.dispatch(progressBar(progress));
   }
 
-  selectAlbum(albumId) {
-    axios.get(`/api/albums/${albumId}`)
-    .then(res => res.data)
-    .then(album => this.setState({
-      selectedAlbum: convertAlbum(album)
-    }));
-  }
+  // selectAlbum(albumId) {
+  //   axios.get(`/api/albums/${albumId}`)
+  //   .then(res => res.data)
+  //   .then(album => this.setState({
+  //     selectedAlbum: convertAlbum(album)
+  //   }));
+  // }
 
   selectArtist(artistId) {
     Promise.all([

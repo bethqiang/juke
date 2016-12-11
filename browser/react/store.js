@@ -4,10 +4,12 @@ import thunkMiddleware from 'redux-thunk';
 
 import lyricsReducer from './reducers/lyrics-reducer';
 import playerReducer from './reducers/player-reducer';
+import albumsReducer from './reducers/albums-reducer';
 
 const reducers = combineReducers({
   lyrics: lyricsReducer,
-  player: playerReducer
+  player: playerReducer,
+  albums: albumsReducer
 });
 
 // applyMiddleware accepts any number of middleware as arguments
