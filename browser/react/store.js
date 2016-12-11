@@ -5,11 +5,15 @@ import thunkMiddleware from 'redux-thunk';
 import lyricsReducer from './reducers/lyrics-reducer';
 import playerReducer from './reducers/player-reducer';
 import albumsReducer from './reducers/albums-reducer';
+import playlistsReducer from './reducers/playlists-reducer';
+import songsReducer from './reducers/songs-reducer';
 
 const reducers = combineReducers({
   lyrics: lyricsReducer,
   player: playerReducer,
-  albums: albumsReducer
+  albums: albumsReducer,
+  playlists: playlistsReducer,
+  songs: songsReducer
 });
 
 // applyMiddleware accepts any number of middleware as arguments

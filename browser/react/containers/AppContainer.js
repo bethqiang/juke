@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import {browserHistory} from 'react-router';
 import axios from 'axios';
 
 import initialState from '../initialState';
 import AUDIO from '../audio';
-import {convertAlbum, convertAlbums, convertSong, convertSongs, skip} from '../utils';
+import {convertAlbums, convertSongs} from '../utils';
 
 import store from '../store';
 import {play, pause, load, startSong, toggle, toggleOne, next, prev, progressBar} from '../action-creators/player';
@@ -22,12 +21,7 @@ class AppContainer extends Component {
     this.toggleOne = this.toggleOne.bind(this);
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
-    // this.selectAlbum = this.selectAlbum.bind(this);
     this.selectArtist = this.selectArtist.bind(this);
-    this.addPlaylist = this.addPlaylist.bind(this);
-    this.selectPlaylist = this.selectPlaylist.bind(this);
-    this.loadSongs = this.loadSongs.bind(this);
-    this.addSongToPlaylist = this.addSongToPlaylist.bind(this);
   }
 
   componentDidMount() {
@@ -36,12 +30,9 @@ class AppContainer extends Component {
       this.setState(store.getState());
     });
 
-    Promise.all([
-      axios.get('/api/artists/'),
-      axios.get('/api/playlists/')
-    ])
-    .then(response => response.map(res => res.data))
-    .then(data => this.onLoad(...data));
+    axios.get('/api/artists/')
+    .then(res => res.data)
+    .then(data => this.onLoad(data));
 
     AUDIO.addEventListener('ended', () =>
       this.next());
@@ -53,10 +44,9 @@ class AppContainer extends Component {
     this.unsubscribe();
   }
 
-  onLoad (artists, playlists) {
+  onLoad (artists) {
     this.setState({
-      artists: artists,
-      playlists: playlists
+      artists: artists
     });
   }
 
@@ -122,58 +112,6 @@ class AppContainer extends Component {
     this.setState({selectedArtist: artist});
   }
 
-  addPlaylist(playlistName) {
-    axios.post('/api/playlists', {name: playlistName})
-    .then(res => res.data)
-    .then(playlist => {
-      this.setState({
-        playlists: [...this.state.playlists, playlist]
-      });
-      const path = `/playlists/${playlist.id}`;
-      browserHistory.push(path);
-    });
-  }
-
-  selectPlaylist(playlistId) {
-    axios.get(`/api/playlists/${playlistId}`)
-    .then(res => res.data)
-    .then(playlist => {
-      playlist.songs = convertSongs(playlist.songs);
-      this.setState({
-        selectedPlaylist: playlist
-      });
-    });
-  }
-
-  loadSongs () {
-    axios.get('/api/songs')
-    .then(res => res.data)
-    .then(songs => {
-      this.setState({
-        songs: songs
-      });
-    });
-  }
-
-  addSongToPlaylist (playlistId, songId) {
-    return axios.post(`/api/playlists/${playlistId}/songs`, {
-      id: songId
-    })
-    .then(res => res.data)
-    .then(song => {
-      const selectedPlaylist = this.state.selectedPlaylist;
-      const songs = this.state.selectedPlaylist.songs;
-      const newSongs = [...songs, convertSong(song)];
-      const newSelectedPlaylist = Object.assign({}, selectedPlaylist, {
-        songs: newSongs
-      });
-
-      this.setState({
-        selectedPlaylist: newSelectedPlaylist
-      });
-    });
-  }
-
   render() {
 
     const props = Object.assign({}, this.state, {
@@ -190,7 +128,7 @@ class AppContainer extends Component {
     return (
       <div id="main" className="container-fluid">
         <div className="col-xs-2">
-          <Sidebar playlists={this.state.playlists} />
+          <Sidebar playlists={this.state.playlists.list} />
         </div>
         <div className="col-xs-10">
         {

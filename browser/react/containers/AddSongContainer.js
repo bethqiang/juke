@@ -1,20 +1,29 @@
 import React, {Component} from 'react';
 import AddSong from '../components/AddSong';
+import store from '../store';
+import {loadAllSongs, addSongToPlaylist} from '../action-creators/playlists';
 
 class AddSongContainer extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = Object.assign({}, {
       songId: 1,
       error: false
-    };
+    }, store.getState());
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
-    this.props.loadSongs();
+    this.unsubscribe = store.subscribe(() => {
+      this.setState(store.getState());
+    });
+    store.dispatch(loadAllSongs());
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 
   handleChange(evt) {
@@ -30,16 +39,13 @@ class AddSongContainer extends Component {
     const playlistId = this.props.selectedPlaylist.id;
     const songId = this.state.songId;
 
-    this.props.addSongToPlaylist(playlistId, songId)
-    .catch(err => {
-      console.log(err);
-      this.setState({error: true});
-    });
+    store.dispatch(addSongToPlaylist(playlistId, songId))
+    .catch(() => this.setState({error: true}));
   }
 
   render() {
 
-    const songs = this.props.songs;
+    const songs = this.state.songs;
     const error = this.state.error;
 
     return (
