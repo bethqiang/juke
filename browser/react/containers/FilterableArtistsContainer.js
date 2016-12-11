@@ -1,7 +1,6 @@
-'use strict';
-
 import React, {Component} from 'react';
 
+import store from '../store';
 import FilterInput from '../components/FilterInput';
 import Artists from '../components/Artists';
 
@@ -9,10 +8,20 @@ class FilterableArtistContainer extends Component {
 
   constructor() {
     super();
-    this.state = {
+    this.state = Object.assign({
       inputVal: ''
-    };
+    }, store.getState().artists);
     this.handleChange = this.handleChange.bind(this);
+  }
+
+  componentDidMount() {
+    this.unsubscribe = store.subscribe(() => {
+      this.setState(store.getState().artists);
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 
   handleChange(event) {
@@ -23,7 +32,7 @@ class FilterableArtistContainer extends Component {
   render() {
 
     const inputVal = this.state.inputVal;
-    const filteredArtists = this.props.artists.filter(artist =>
+    const filteredArtists = this.state.list.filter(artist =>
       artist.name.match(inputVal));
 
     return (

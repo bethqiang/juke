@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 
-import initialState from '../initialState';
-import {convertAlbums, convertSongs} from '../utils';
+// import {convertAlbums, convertSongs} from '../utils';
 
 import store from '../store';
 import {play, pause, load, startSong} from '../action-creators/player';
@@ -14,8 +13,8 @@ class AppContainer extends Component {
 
   constructor(props) {
     super(props);
-    this.state = Object.assign({}, initialState, store.getState());
-    this.selectArtist = this.selectArtist.bind(this);
+    this.state = Object.assign({}, store.getState());
+    // this.selectArtist = this.selectArtist.bind(this);
   }
 
   componentDidMount() {
@@ -55,23 +54,23 @@ class AppContainer extends Component {
     store.dispatch(startSong(song, list));
   }
 
-  selectArtist(artistId) {
-    Promise.all([
-      axios.get(`/api/artists/${artistId}`),
-      axios.get(`/api/artists/${artistId}/albums`),
-      axios.get(`/api/artists/${artistId}/songs`)
-    ])
-    .then(response => response.map(res => res.data))
-    .then(data => this.onLoadArtist(...data));
-  }
+  // selectArtist(artistId) {
+  //   Promise.all([
+  //     axios.get(`/api/artists/${artistId}`),
+  //     axios.get(`/api/artists/${artistId}/albums`),
+  //     axios.get(`/api/artists/${artistId}/songs`)
+  //   ])
+  //   .then(response => response.map(res => res.data))
+  //   .then(data => this.onLoadArtist(...data));
+  // }
 
-  onLoadArtist(artist, albums, songs) {
-    songs = convertSongs(songs);
-    albums = convertAlbums(albums);
-    artist.albums = albums;
-    artist.songs = songs;
-    this.setState({selectedArtist: artist});
-  }
+  // onLoadArtist(artist, albums, songs) {
+  //   songs = convertSongs(songs);
+  //   albums = convertAlbums(albums);
+  //   artist.albums = albums;
+  //   artist.songs = songs;
+  //   this.setState({selectedArtist: artist});
+  // }
 
   render() {
 
