@@ -26,13 +26,12 @@ class ArtistContainer extends Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <Artist
         player={this.state.player}
         selectedArtist={this.state.artists.selected}
         toggleOne={this.toggle}
-        children={this.props.children.props.children} />
+        children={this.props.children} />
     );
   }
 

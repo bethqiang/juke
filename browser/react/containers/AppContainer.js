@@ -73,27 +73,14 @@ class AppContainer extends Component {
   // }
 
   render() {
-
-    const props = Object.assign({}, this.state, {
-      toggleOne: this.toggleOne,
-      toggle: this.toggle,
-      selectAlbum: this.selectAlbum,
-      selectArtist: this.selectArtist,
-      addPlaylist: this.addPlaylist,
-      selectPlaylist: this.selectPlaylist,
-      loadSongs: this.loadSongs,
-      addSongToPlaylist: this.addSongToPlaylist
-    });
-
+    console.log(this.props.children);
     return (
       <div id="main" className="container-fluid">
         <div className="col-xs-2">
           <Sidebar playlists={this.state.playlists.list} />
         </div>
         <div className="col-xs-10">
-        {
-          this.props.children && React.cloneElement(this.props.children, props)
-        }
+        {this.props.children}
         </div>
         <PlayerContainer
           currentSong={this.state.player.currentSong}
