@@ -5,8 +5,8 @@ import React from 'react';
 const Songs = (props) => {
 
   const songs = props.songs;
-  const currentSong = props.currentSong;
-  const isPlaying = props.isPlaying;
+  const currentSong = props.player.currentSong;
+  const isPlaying = props.player.isPlaying;
   const toggleOne = props.toggleOne;
 
   return (

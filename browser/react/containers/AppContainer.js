@@ -1,5 +1,3 @@
-'use strict';
-
 import React, {Component} from 'react';
 import {browserHistory} from 'react-router';
 import axios from 'axios';
@@ -8,6 +6,9 @@ import initialState from '../initialState';
 import AUDIO from '../audio';
 import {convertAlbum, convertAlbums, convertSong, convertSongs, skip} from '../utils';
 
+import store from '../store';
+import {play, pause, load, startSong, toggle, toggleOne, next, prev, progressBar} from '../action-creators/player';
+
 import Sidebar from '../components/Sidebar';
 import Player from '../components/Player';
 
@@ -15,7 +16,7 @@ class AppContainer extends Component {
 
   constructor(props) {
     super(props);
-    this.state = initialState;
+    this.state = Object.assign({}, initialState, store.getState());
 
     this.toggle = this.toggle.bind(this);
     this.toggleOne = this.toggleOne.bind(this);
@@ -30,6 +31,11 @@ class AppContainer extends Component {
   }
 
   componentDidMount() {
+
+    this.unsubscribe = store.subscribe(() => {
+      this.setState(store.getState());
+    });
+
     Promise.all([
       axios.get('/api/albums/'),
       axios.get('/api/artists/'),
@@ -44,6 +50,10 @@ class AppContainer extends Component {
       this.setProgress(AUDIO.currentTime / AUDIO.duration));
   }
 
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
   onLoad (albums, artists, playlists) {
     this.setState({
       albums: convertAlbums(albums),
@@ -53,54 +63,39 @@ class AppContainer extends Component {
   }
 
   play() {
-    AUDIO.play();
-    this.setState({ isPlaying: true });
+    store.dispatch(play());
   }
 
   pause() {
-    AUDIO.pause();
-    this.setState({ isPlaying: false });
+    store.dispatch(pause());
   }
 
   load(currentSong, currentSongList) {
-    AUDIO.src = currentSong.audioUrl;
-    AUDIO.load();
-    this.setState({
-      currentSong: currentSong,
-      currentSongList: currentSongList
-    });
+    store.dispatch(load(currentSong, currentSongList));
   }
 
   startSong(song, list) {
-    this.pause();
-    this.load(song, list);
-    this.play();
-  }
-
-  toggleOne(selectedSong, selectedSongList) {
-    if (selectedSong.id !== this.state.currentSong.id) {
-      this.startSong(selectedSong, selectedSongList);
-    }
-    else {
-      this.toggle();
-    }
+    store.dispatch(startSong(song, list));
   }
 
   toggle() {
-    if (this.state.isPlaying) this.pause();
-    else this.play();
+    store.dispatch(toggle());
+  }
+
+  toggleOne(selectedSong, selectedSongList) {
+    store.dispatch(toggleOne(selectedSong, selectedSongList));
   }
 
   next() {
-    this.startSong(...skip(1, this.state));
+    store.dispatch(next());
   }
 
   prev() {
-    this.startSong(...skip(-1, this.state));
+    store.dispatch(prev());
   }
 
   setProgress(progress) {
-    this.setState({progress: progress});
+    store.dispatch(progressBar(progress));
   }
 
   selectAlbum(albumId) {
@@ -205,10 +200,10 @@ class AppContainer extends Component {
         }
         </div>
         <Player
-          currentSong={this.state.currentSong}
-          currentSongList={this.state.currentSongList}
-          isPlaying={this.state.isPlaying}
-          progress={this.state.progress}
+          currentSong={this.state.player.currentSong}
+          currentSongList={this.state.player.currentSongList}
+          isPlaying={this.state.player.isPlaying}
+          progress={this.state.player.progress}
           next={this.next}
           prev={this.prev}
           toggle={this.toggle}
