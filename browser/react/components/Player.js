@@ -8,7 +8,7 @@ const Player = (props) => {
   const progress = props.progress;
   const next = props.next;
   const prev = props.prev;
-  const toggle = props.toggle;
+  const toggleOne = props.toggleOne;
 
   return (
     <footer>
@@ -17,7 +17,7 @@ const Player = (props) => {
           <button className="btn btn-default" onClick={prev}>
             <span className="glyphicon glyphicon-step-backward"></span>
           </button>
-          <button className="btn btn-default" onClick={toggle}>
+          <button className="btn btn-default" onClick={() => toggleOne(currentSong, currentSongList)}>
             <span className={isPlaying ? 'glyphicon glyphicon-pause' : 'glyphicon glyphicon-play'}></span>
           </button>
           <button className="btn btn-default" onClick={next}>

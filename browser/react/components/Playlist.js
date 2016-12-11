@@ -7,8 +7,6 @@ const Playlist = props => {
 
   const playlist = props.selectedPlaylist;
 
-  console.log(props);
-
   return (
     <div>
       <h3>{playlist.name}</h3>
