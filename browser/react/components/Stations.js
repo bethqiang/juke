@@ -12,7 +12,7 @@ const Stations = (props) => {
         {
           Object.keys(stations).map(station => (
             <div key={station} className="list-group-item">
-              <Link to={'fill/me/in/later'}>{station}</Link>
+              <Link to={`/stations/${station}`}>{station}</Link>
             </div>
           ))
         }
