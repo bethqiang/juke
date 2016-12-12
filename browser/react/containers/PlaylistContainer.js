@@ -1,39 +1,26 @@
-import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import store from '../store';
 import Playlist from '../components/Playlist';
 import { toggleOne } from '../action-creators/player';
 
-class PlaylistContainer extends Component {
+const mapStateToProps = state => {
+  return {
+    player: state.player,
+    selectedPlaylist: state.playlists.selected
+  };
+};
 
-  constructor() {
-    super();
-    this.state = store.getState();
-  }
+const mapDispatchToProps = dispatch => {
+  return {
+    toggleOne(song, list) {
+      dispatch(toggleOne(song, list));
+    }
+  };
+};
 
-  componentDidMount() {
-    this.unsubscribe = store.subscribe(() => {
-      this.setState(store.getState());
-    });
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-
-  toggle(song, list) {
-    store.dispatch(toggleOne(song, list));
-  }
-
-  render() {
-    return (
-      <Playlist
-        player={this.state.player}
-        selectedPlaylist={this.state.playlists.selected}
-        toggleOne={this.toggle} />
-    );
-  }
-
-}
+const PlaylistContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Playlist);
 
 export default PlaylistContainer;

@@ -1,55 +1,51 @@
 import React, { Component } from 'react';
-import AUDIO from '../audio';
-import store from '../store';
-import { prev, next, progressBar, toggleOne } from '../action-creators/player';
+import { connect } from 'react-redux';
+
 import Player from '../components/Player';
+import AUDIO from '../audio';
+import { prev, next, progressBar, toggleOne } from '../action-creators/player';
 
-class PlayerContainer extends Component {
+const mapStateToProps = state => {
+  return {
+    currentSong: state.player.currentSong,
+    currentSongList: state.player.currentSongList,
+    isPlaying: state.player.isPlaying,
+    progress: state.player.progress
+  };
+};
 
-  constructor() {
-    super();
-    this.state = store.getState().player;
-    this.toggle = this.toggle.bind(this);
+const mapDispatchToProps = dispatch => {
+  return {
+    next() {
+      dispatch(next());
+    },
+    prev() {
+      dispatch(prev());
+    },
+    setProgress() {
+      dispatch(progressBar(AUDIO.currentTime / AUDIO.duration));
+    },
+    toggleOne(song, list) {
+      dispatch(toggleOne(song, list));
+    }
+  };
+};
+
+const PlayerContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
+  class IntermediatePlayerContainer extends Component {
+    componentDidMount () {
+      AUDIO.addEventListener('ended', this.props.next);
+      AUDIO.addEventListener('timeupdate', () => {
+        this.props.setProgress(AUDIO.currentTime / AUDIO.duration);
+      });
+    }
+    render () {
+      return <Player {...this.props} />;
+    }
   }
-
-  componentDidMount() {
-
-    AUDIO.addEventListener('ended', this.next);
-    AUDIO.addEventListener('timeupdate', () => {
-      store.dispatch(progressBar(AUDIO.currentTime / AUDIO.duration));
-    });
-
-    this.unsubscribe = store.subscribe(() => {
-      this.setState(store.getState().player);
-    });
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-
-  next() {
-    store.dispatch(next());
-  }
-
-  prev() {
-    store.dispatch(prev());
-  }
-
-  toggle() {
-    store.dispatch(toggleOne(this.state.currentSong, this.state.currentSongList));
-  }
-
-  render() {
-    return (
-      <Player
-        {...this.state}
-        next={this.next}
-        prev={this.prev}
-        toggleOne={this.toggle} />
-    );
-  }
-
-}
+);
 
 export default PlayerContainer;
