@@ -2,8 +2,6 @@ import React from 'react';
 
 const Songs = props => {
 
-  // put player  back into 8 & 9
-
   const songs = props.songs;
   const currentSong = props.player.currentSong;
   const isPlaying = props.player.isPlaying;

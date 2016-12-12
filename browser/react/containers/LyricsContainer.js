@@ -26,10 +26,10 @@ const LyricsContainer = connect(
 
     constructor() {
       super();
-      this.state = Object.assign({}, {
+      this.state = {
         artistQuery: '',
         songQuery: ''
-      });
+      };
       this.setArtist = this.setArtist.bind(this);
       this.setSong = this.setSong.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);

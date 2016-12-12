@@ -1,7 +1,5 @@
-import React from 'react';
 import { connect } from 'react-redux';
 
-import store from '../store';
 import Stations from '../components/stations';
 
 const convertSongsToStations = songsArray => {
@@ -20,15 +18,8 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-
-  };
-};
-
 const StationsContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(Stations);
 
 export default StationsContainer;
