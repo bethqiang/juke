@@ -1,40 +1,27 @@
-import React, { Component } from 'react';
-import store from '../store';
-import Artist from '../components/Artist';
+import { connect } from 'react-redux';
 
+import Artist from '../components/Artist';
 import { toggleOne } from '../action-creators/player';
 
-class ArtistContainer extends Component {
+const mapStateToProps = (state, ownProps) => {
+  return {
+    player: state.player,
+    selectedArtist: state.artists.selected,
+    children: ownProps.children
+  };
+};
 
-  constructor() {
-    super();
-    this.state = store.getState();
-  }
+const mapDispatchToProps = dispatch => {
+  return {
+    toggleOne(song, list) {
+      dispatch(toggleOne(song, list));
+    }
+  };
+};
 
-  componentDidMount() {
-    this.unsubscribe = store.subscribe(() => {
-      this.setState(store.getState());
-    });
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-
-  toggle(song, list) {
-    store.dispatch(toggleOne(song, list));
-  }
-
-  render() {
-    return (
-      <Artist
-        player={this.state.player}
-        selectedArtist={this.state.artists.selected}
-        toggleOne={this.toggle}
-        children={this.props.children} />
-    );
-  }
-
-}
+const ArtistContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Artist);
 
 export default ArtistContainer;

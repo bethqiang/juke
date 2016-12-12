@@ -1,39 +1,60 @@
-import React, { Component } from 'react';
-import store from '../store';
-import Album from '../components/Album';
+import { connect } from 'react-redux';
 
+import Album from '../components/Album';
 import { toggleOne } from '../action-creators/player';
 
-class AlbumContainer extends Component {
+const mapStateToProps = state => {
+  return {
+    selectedAlbum: state.albums.selected,
+    player: state.player,
+  };
+};
 
-  constructor() {
-    super();
-    this.state = store.getState();
-  }
+const mapDispatchToProps = dispatch => {
+  return {
+    toggleOne(song, list) {
+      dispatch(toggleOne(song, list));
+    }
+  };
+};
 
-  componentDidMount() {
-    this.unsubscribe = store.subscribe(() => {
-      this.setState(store.getState());
-    });
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-
-  toggle(song, list) {
-    store.dispatch(toggleOne(song, list));
-  }
-
-  render() {
-    return (
-      <Album
-        selectedAlbum={this.state.albums.selected}
-        player={this.state.player}
-        toggleOne={this.toggle} />
-    );
-  }
-
-}
+const AlbumContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Album);
 
 export default AlbumContainer;
+
+// class AlbumContainer extends Component {
+
+//   constructor() {
+//     super();
+//     this.state = store.getState();
+//   }
+
+//   componentDidMount() {
+//     this.unsubscribe = store.subscribe(() => {
+//       this.setState(store.getState());
+//     });
+//   }
+
+//   componentWillUnmount() {
+//     this.unsubscribe();
+//   }
+
+//   toggle(song, list) {
+//     store.dispatch(toggleOne(song, list));
+//   }
+
+//   render() {
+//     return (
+//       <Album
+//         selectedAlbum={this.state.albums.selected}
+//         player={this.state.player}
+//         toggleOne={this.toggle} />
+//     );
+//   }
+
+// }
+
+// export default AlbumContainer;
